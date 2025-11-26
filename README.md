@@ -64,6 +64,39 @@ python -m client.cli "who am I" \
   --no-text-only
 ```
 
+## Deploying the broker behind API Gateway
+
+The repository ships with a small helper that wires Lambda and API Gateway together without CloudFormation. You need AWS credentials and an IAM role that the Lambda function can assume.
+
+1. Create or reuse an IAM role for Lambda (trust policy grants `lambda.amazonaws.com`) and attach the basic execution policy:
+   ```bash
+   aws iam create-role \
+     --role-name marvin-broker-role \
+     --assume-role-policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"lambda.amazonaws.com"},"Action":"sts:AssumeRole"}]}'
+
+   aws iam attach-role-policy \
+     --role-name marvin-broker-role \
+     --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+   ```
+   Copy the role ARN from `aws iam get-role --role-name marvin-broker-role`.
+
+2. Deploy the Lambda function and HTTP API Gateway route using the helper (defaults shown):
+   ```bash
+   python -m broker.deploy \
+     --role-arn arn:aws:iam::<account-id>:role/marvin-broker-role \
+     --function-name marvin-broker \
+     --api-name marvin-broker-api \
+     --stage-name prod
+   ```
+   The script packages `broker/handler.py`, creates/updates the Lambda function, provisions an API Gateway HTTP API with a `POST /ingest/audio` route, and returns both the base URL and full ingest URL (JSON keys `broker_base_url` and `ingest_url`).
+
+3. Export `BROKER_URL` using the base URL from the script output (the client appends `/ingest/audio` automatically):
+   ```bash
+   export BROKER_URL="https://<api-id>.execute-api.<region>.amazonaws.com/prod"
+   ```
+
+4. Point the console or monitor at the endpoint as shown above.
+
 ## Sending monitor events
 
 The monitor subsystem converts detections into text and sends them to the broker. Configure it with the same session ID so the broker can thread the conversation:
