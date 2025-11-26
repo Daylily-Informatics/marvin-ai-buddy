@@ -20,6 +20,7 @@ from utils.agent.models import (
     create_anthropic_model,
     create_grok_model,
     create_deepseek_model,
+    create_bedrock_model,
 )
 
 class ChatAgent:
@@ -68,6 +69,7 @@ class ChatAgent:
             "GROQ" : partial(create_groq_model, model_name="llama-3.1-70b-versatile"),
             "GROK": create_grok_model,
             "CLAUDE": create_anthropic_model,
+            "BEDROCK": create_bedrock_model,
             "MISTRAL":  create_mistral_model,
             "GEMINI": create_google_model,
             "DEEPSEEK": create_deepseek_model,

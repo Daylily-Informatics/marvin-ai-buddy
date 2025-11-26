@@ -151,6 +151,17 @@ sudo apt-get update
 sudo apt-get install -y cmake build-essential ffmpeg chromium mpv
 ```
 
+On macOS, you can install the native dependencies with Homebrew:
+```bash
+brew update
+brew install cmake ffmpeg mpv portaudio libsndfile
+```
+
+If you plan to use the Faster-Whisper or PyTorch TTS stack on Apple Silicon, install the metal wheels before the Python requirements:
+```bash
+pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+```
+
 Install Python dependencies
 ```bash
 pip install -r requirements.txt
@@ -161,6 +172,8 @@ Configure .env with your API keys
 ```bash
 cp .env.example .env
 ```
+
+To use AWS Bedrock (now the default chat model), set your AWS credentials in the environment or `~/.aws/credentials` and ensure the `AWS_REGION` matches the region where Bedrock is enabled. You can override the Bedrock model and region in `app/utils/agent/models.py` if needed.
 
 Run EVA 
 ```bash
@@ -216,8 +229,8 @@ eva_configuration = {
     "BASE_URL": "http://localhost:11434", 
   
   # Main agent model setting:
-  # Supports Anthropic-Claude3.5, Groq-llama3.1-70b, OpenAI-ChatGPT-4o, Mistral Large, Gemini 1.5 Pro, and Ollama models, Recommend: Claude or Chatgpt 
-    "CHAT_MODEL": "claude", 
+  # Supports AWS Bedrock Claude 3.5, Groq-llama3.1-70b, OpenAI-ChatGPT-4o, Mistral Large, Gemini 1.5 Pro, and Ollama models. Bedrock is recommended for managed inference and macOS portability.
+    "CHAT_MODEL": "bedrock",
   
   # vision model setting:
   # Supports Chatgpt-4o-mini, Groq-llama-3.2-11b-vision (free) and Ollama llava-phi3(local), recommend: 4omini, but llava-phi3 is very small and free. 
