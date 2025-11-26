@@ -14,9 +14,9 @@
 #
 # CHAT_MODEL:
 #   Main model for reasoning and conversation.
-#   Options: "Claude", "Groq", "Chatgpt", "Mistral", "Gemini", "llama"
-#   Recommended: Claude
-#   Factory: Groq-llama3.1-70b, OpenAI-ChatGPT-4o, Mistral Large, Google Gemini 1.5 Pro, Anthropic-claude-sonnet-3.5
+#   Options: "Claude", "Groq", "Chatgpt", "Mistral", "Gemini", "llama", "Bedrock"
+#   Recommended: Bedrock Claude 3.5 Sonnet
+#   Factory: AWS Bedrock Claude 3.5 Sonnet, Groq-llama3.1-70b, OpenAI-ChatGPT-4o, Mistral Large, Google Gemini 1.5 Pro, Anthropic-claude-sonnet-3.5
 #   Ollama all models (as long as they are pulled, you can edit the options in utils/agent/chatagent.py)
 # 
 # VISION_MODEL:
@@ -49,7 +49,7 @@ eva_configuration = {
     "DEVICE": "mobile", 
     "LANGUAGE": "en",
     "BASE_URL": "http://localhost:11434",
-    "CHAT_MODEL": "claude",
+    "CHAT_MODEL": "bedrock",
     "VISION_MODEL": "groq",
     "STT_MODEL": "whisper",
     "TTS_MODEL": "elevenlabs",

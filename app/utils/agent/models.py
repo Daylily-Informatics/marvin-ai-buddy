@@ -78,10 +78,10 @@ def create_google_model(
         raise Exception(f"Error: Failed to initialize Google model: {str(e)}")
     
 def create_anthropic_model(
-        model_name: str = "claude-3-7-sonnet-latest", 
+        model_name: str = "claude-3-7-sonnet-latest",
         temperature: float = 0.8
     ) -> BaseLanguageModel:
-    
+
     from langchain_anthropic import ChatAnthropic
     
     try:
@@ -92,6 +92,23 @@ def create_anthropic_model(
         )
     except Exception as e:
         raise Exception(f"Error: Failed to initialize Anthropic model: {str(e)}")
+
+def create_bedrock_model(
+        model_id: str = "anthropic.claude-3-5-sonnet-20240620-v1:0",
+        region: str = "us-east-1",
+        temperature: float = 0.8
+    ) -> BaseLanguageModel:
+
+    from langchain_aws import ChatBedrock
+
+    try:
+        return ChatBedrock(
+            model_id=model_id,
+            region_name=region,
+            model_kwargs={"temperature": temperature},
+        )
+    except Exception as e:
+        raise Exception(f"Error: Failed to initialize Bedrock model: {str(e)}")
 
 def create_grok_model(
         model_name: str = "grok-beta",
