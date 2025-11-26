@@ -82,8 +82,9 @@ The repository ships with a small helper that wires Lambda and API Gateway toget
 
 2. Deploy the Lambda function and HTTP API Gateway route using the helper (defaults shown):
    ```bash
+   export AWS_ACCT=$(aws sts get-caller-identity --query Account --output text)
    python -m broker.deploy \
-     --role-arn arn:aws:iam::<account-id>:role/marvin-broker-role \
+     --role-arn arn:aws:iam::${AWS_ACCT}:role/marvin-broker-role \
      --function-name marvin-broker \
      --api-name marvin-broker-api \
      --stage-name prod
