@@ -7,8 +7,6 @@
 *Multimodal, Multilingual, Cross Platform, Modular Architecture*
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![GitHub Issues](https://img.shields.io/github/issues/Genesis1231/EVA)](https://github.com/Genesis1231/EVA/issues)
-[![GitHub Stars](https://img.shields.io/github/stars/Genesis1231/EVA)](https://github.com/Genesis1231/EVA/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 </div>
@@ -135,8 +133,8 @@ EVA/
 
 Clone repository
 ```bash
-git clone https://github.com/Genesis1231/EVA.git
-cd EVA
+git clone https://github.com/<your-username>/marvin-ai-buddy.git
+cd marvin-ai-buddy
 ```
 
 Create virtual environment
@@ -168,17 +166,20 @@ pip install -r requirements.txt
 pip install git+https://github.com/wenet-e2e/wespeaker.git
 ```
 
-Configure .env with your API keys
+Configure .env with your API keys (the sample file enumerates all supported providers and tool backends)
 ```bash
 cp .env.example .env
+# then fill in the provider keys for LLM, STT, TTS, Tavily, Suno and Discord/Midjourney
 ```
 
 To use AWS Bedrock (now the default chat model), set your AWS credentials in the environment or `~/.aws/credentials` and ensure the `AWS_REGION` matches the region where Bedrock is enabled. You can override the Bedrock model and region in `app/utils/agent/models.py` if needed.
 
-Run EVA 
+Run EVA
 ```bash
 python app/main.py
 ```
+The backend starts the FastAPI server on port 8080 and initializes the conversation workflow.
+
 Similarly, you can run EVA with docker.
 
 ```dockerfile
@@ -246,9 +247,17 @@ eva_configuration = {
   
   # Summarization model setting:
   # Supports groq-llama3.1-8b, Anthropic-claude-haiku3.5 and Ollama-llama3.2(local).
-    "SUMMARIZE_MODEL": "chatgpt" 
+    "SUMMARIZE_MODEL": "chatgpt"
 }
 ```
+
+### Environment variables
+
+Copy `.env.example` to `.env` and fill in the keys for the providers you plan to use. Key values include:
+- API keys for OpenAI, Anthropic, Groq, Mistral, Google, DeepSeek, and Grok.
+- AWS credentials (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, optional `AWS_SESSION_TOKEN`) plus `AWS_REGION` for Bedrock.
+- Speech providers (e.g., `ELEVENLABS_API_KEY`, optional `COQUI_TTS_SPEAKER`).
+- Tool backends such as `TAVILY_API_KEY`, Suno (`SUNO_BASE_URL`, `SUNO_API_KEY`), and Discord/Midjourney automation (`MJ_*`).
 
 The best combination(my preference):
 - Claude3.5/Chatgpt-4o as the chat model. The response is more coherent with larger amount of input information.
@@ -264,8 +273,13 @@ EVA also works with a completely free combination:
 - Coqui TTS as the TTS model.
 - llama3.1-8b as the summarization model
 
-The performance is also good if you have a decent GPU. 
+The performance is also good if you have a decent GPU.
 Groq is free too but it has a limit for token usage per minute. So you might run out of tokens quickly.
+
+Data directories are included in the repo to make onboarding easier:
+- `app/data/pids/` for photo IDs.
+- `app/data/voids/` for voice IDs.
+- `app/data/database/eva.db` is created automatically on first run with an `ids` table that maps user names to their media files.
 
 ### Web Interface Setup
 React verison:

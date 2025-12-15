@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+.env
+.env.local
+.env.*.local
+!.env.example
+
+node_modules/
+react-eva/node_modules/
+.venv/
+
+# Local data artifacts
+app/data/database/eva.db
+app/data/pids/*
+app/data/voids/*
+!app/data/pids/__init__.py
+!app/data/voids/__init__.py
