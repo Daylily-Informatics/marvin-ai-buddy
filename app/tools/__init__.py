@@ -114,6 +114,4 @@ class ToolManager:
         
         with ThreadPoolExecutor() as executor:
             return list(executor.map(execute_tool, actions))
-        
-
 
